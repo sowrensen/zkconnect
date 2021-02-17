@@ -1,0 +1,4 @@
+device:
+  host: 192.168.0.112
+  port: 4370
+endpoint: http://test.com # don't forget to point this to your application route
