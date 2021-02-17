@@ -1,6 +1,6 @@
 # ZKConnect
 
-ZK Connect is a python script written to send realtime attendance data from ZK Teco devices to an external API. It is designed to run using a service like Supervisor.
+ZK Connect is a python script designed to work as a client to send realtime attendance data from ZK Teco devices to an external API. It is designed to run using a service like Supervisor.
 
 ### Requirements
 
