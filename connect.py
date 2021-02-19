@@ -8,6 +8,12 @@ import logging
 class ZkConnect:
     
     def __init__(self, host, port, endpoint):
+        """
+        Connect to a ZK Teco device and monitor real-time data.
+        :param host: The public/private IP address of ZK Teco device
+        :param port: The port of ZK Teco device, usually 4370
+        :param endpoint: The API endpoint of an external service, where the client will transmit real-time data.
+        """
         self.endpoint = endpoint
         try:
             self.connection = self._connect(host, port)
@@ -18,10 +24,21 @@ class ZkConnect:
             logging.error(error)
     
     def _connect(self, host, port):
+        """
+        Attempt to establish a connection to a ZK Teco device.
+        :param host: The public/private IP address of ZK Teco device
+        :param port: The port of ZK Teco device, usually 4370
+        :return: ZK
+        """
         zk = ZK(ip=host, port=port)
         return zk.connect()
     
     def _transmit(self, data):
+        """
+        Transmit real-time data to the specified endpoint.
+        :param data: The HTTP payload
+        :return: requests.models.Response
+        """
         try:
             response = requests.post(self.endpoint, data)
             response.raise_for_status()
@@ -33,6 +50,9 @@ class ZkConnect:
             logging.error("{}, data: {}".format(error, str(data)))
     
     def monitor(self):
+        """
+        Start monitoring and transmitting real-time data.
+        """
         if not self.connection:
             raise ZKErrorConnection('Connection is not established!')
         
@@ -47,6 +67,9 @@ class ZkConnect:
                 })
     
     def disconnect(self):
+        """
+        Disconnect from the connected ZK Teco device.
+        """
         self.connection.disconnect()
 
 
@@ -54,6 +77,10 @@ class ParseConfig:
     
     @classmethod
     def _validate(cls, config):
+        """
+        Validate the dictionary structure of config.
+        :param config: The dictionary containing device config and endpoint
+        """
         if not all(key in config.keys() for key in ['device', 'endpoint']):
             raise Exception('device or endpoint key is missing!')
         
@@ -68,12 +95,20 @@ class ParseConfig:
     
     @classmethod
     def parse(cls, stream):
+        """
+        Parse a yaml file to a dictionary.
+        :param stream: The stream of data
+        :return: dict
+        """
         config = load(stream, Loader=Loader)
         cls._validate(config)
         return config
 
 
 def init():
+    """
+    Initiate the ZK Teco monitoring client.
+    """
     try:
         logging.basicConfig(
             format='%(asctime)s/%(name)s/%(levelname)s/%(lineno)d: %(message)s',
