@@ -1,8 +1,11 @@
+import logging
+import os
+from pathlib import Path
+
+import requests
+from yaml import Loader, load
 from zk import ZK
 from zk.exception import ZKError, ZKErrorConnection, ZKNetworkError
-from yaml import load, Loader
-import requests
-import logging
 
 
 class ZkConnect:
@@ -115,7 +118,8 @@ def init():
             filename='transaction_log.txt',
             level=logging.DEBUG
         )
-        stream = open('config.yaml', 'r')
+        configPath = Path(os.path.abspath(__file__)).parent / 'config.yaml'
+        stream = open(configPath, 'r')
         config = ParseConfig.parse(stream)
         device = config.get('device')
         endpoint = config.get('endpoint')
