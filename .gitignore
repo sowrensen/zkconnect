@@ -148,3 +148,4 @@ dmypy.json
 config.yaml
 transaction_log.txt
 .idea/
+*.ini

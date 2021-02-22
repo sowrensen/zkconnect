@@ -1,0 +1,9 @@
+[program:<PROGRAM_NAME>]
+process_name=%(program_name)s_%(process_num)02d
+directory=<SCRIPT_DIRECTORY>
+command=<VENV_PYTHON_BIN_PATH> connect.py
+autostart=true
+autorestart=true
+startsecs=0
+stdout_logfile=<OUTPUT_LOG_PATH>
+stderr_logfile=<ERR_LOG_PATH>

@@ -32,6 +32,7 @@ device:
   host: XXX.XXX.XXX.XXX # your device's ip address
   port: 4370 # usually 4370 is used by most of the devices
 endpoint: http://my-app.test/log # a post API route to your app
+transmission: true # false by default
 ```
 
 ### Running
@@ -45,9 +46,9 @@ After configuring, you can run `python connect.py` to start sending realtime att
 }
 ```
 
-> Note: You should use a service like Supervisor to keep the script running and restarting automatically in case of any exception.
+> Note: You should use a service like Supervisor to keep the script running and restarting automatically in case of any exception. An example supervisor config file is also provided.
 
 
 ### Debugging
 
-The script keeps all transaction logs in a `transaction_log.txt` file within the directory with all the necessary information for debugging. 
+The script keeps all transaction logs in a `transaction_log.txt` file within the directory with all the necessary information for debugging.
