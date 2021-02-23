@@ -50,12 +50,13 @@ class ZkConnect:
         try:
             response = requests.post(self.endpoint, data)
             response.raise_for_status()
-            logging.debug("HTTP Response: " + str(response.text))
+            jsonResponse = response.json()
+            logging.debug("HTTP Response: {}, data: {}".format(jsonResponse.get('message'), jsonResponse.get('log')))
             return response
         except requests.exceptions.HTTPError as error:
-            logging.error("{}, data: {}".format(error, str(data)))
+            logging.error("HTTP Error: {}, message: {}, data: {}".format(error, error.response.text, str(data)))
         except Exception as error:
-            logging.error("{}, data: {}".format(error, str(data)))
+            logging.error("Error: {}, data: {}".format(error, str(data)))
 
     def monitor(self):
         """

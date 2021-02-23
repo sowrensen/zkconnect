@@ -32,17 +32,26 @@ device:
   host: XXX.XXX.XXX.XXX # your device's ip address
   port: 4370 # usually 4370 is used by most of the devices
 endpoint: http://my-app.test/log # a post API route to your app
-transmission: true # false by default
+transmission: true # true by default
 ```
 
 ### Running
 
-After configuring, you can run `python connect.py` to start sending realtime attendance log to your application. The payload is:
+After configuring, you can run `python connect.py` to start sending realtime attendance log to your application. The request payload is:
 
 ```json
 {
   "device_user_id": 21,
   "timestamp": "2021-02-17 18:23:00"
+}
+```
+
+The server response should contain two keys:
+
+```json
+{
+  "log": {...}, // the saved object
+  "message": "A response message"
 }
 ```
 
