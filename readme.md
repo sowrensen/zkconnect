@@ -48,7 +48,7 @@ After configuring, you can run `python connect.py` to start sending realtime att
 
 The server response should contain two keys:
 
-```json
+```
 {
   "log": {...}, // the saved object
   "message": "A response message"
