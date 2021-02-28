@@ -38,7 +38,7 @@ class ZkConnect:
         :param port: The port of ZK Teco device, usually 4370
         :return: ZK
         """
-        zk = ZK(ip=host, port=port)
+        zk = ZK(ip=host, port=port, force_udp=True, verbose=True)
         return zk.connect()
 
     def _transmit(self, data):
@@ -57,6 +57,9 @@ class ZkConnect:
             logging.error("HTTP Error: {}, message: {}, data: {}".format(error, error.response.text, str(data)))
         except Exception as error:
             logging.error("Error: {}, data: {}".format(error, str(data)))
+        finally:
+            if not self.connection.is_enabled:
+                self.connection.enable_device()
 
     def monitor(self):
         """
@@ -65,7 +68,7 @@ class ZkConnect:
         if not self.connection:
             raise ZKErrorConnection('Connection is not established!')
 
-        for log in self.connection.live_capture():
+        for log in self.connection.live_capture(new_timeout=5):
             if log is None:
                 pass
             else:
