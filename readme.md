@@ -61,3 +61,9 @@ The server response should contain two keys:
 ### Debugging
 
 The script keeps all transaction logs in a `transaction_log.txt` file within the directory with all the necessary information for debugging.
+
+
+### Known Issues
+
+  - Sometimes while running via **Supervisor** service, the real time transmission stops working after a while. There are some suspected reasons behind this issue, but none is still confirmed or identified as the real cause.
+  - If the device goes offline or restarts, the script may not be able to re-establish the connection on its own. This case is not confirmed by the way, just an assumption.
