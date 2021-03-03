@@ -76,7 +76,9 @@ class ZkConnect:
             self._connect(reconnect=True)
         else:
             # This should ensure that the device is still connected
-            logging.debug('Getting device time: {}'.format(self.connection.get_time()))
+            time = self.connection.get_time()
+            logging.debug('Getting device time: {}'.format(time))
+            print('Getting device time: {}'.format(time))
     
     def monitor(self):
         """
