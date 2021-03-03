@@ -72,12 +72,10 @@ class ZkConnect:
         """
         Check connection health, in case of failure attempt re-establishment.
         """
-        try:
-            # This should ensure that the device is still connected
-            print('Getting device time: {}'.format(self.connection.get_time()))
-        except Exception as error:
-            logging.error(error)
-            self._connect(reconnect=True)
+        # This should ensure that the device is still connected, if any
+        # exception is raised, supervisor should start the process
+        # all over again.
+        print('Getting device time: {}'.format(self.connection.get_time()))
     
     def monitor(self):
         """
@@ -146,31 +144,25 @@ def init():
     """
     Initiate the ZK Teco monitoring client.
     """
-    try:
-        logging.basicConfig(
-            format='%(asctime)s/%(name)s/%(levelname)s/%(lineno)d: %(message)s',
-            filename='transaction_log.txt',
-            level=logging.DEBUG
-        )
-        configPath = Path(os.path.abspath(__file__)).parent / 'config.yaml'
-        stream = open(configPath, 'r')
-        config = ParseConfig.parse(stream)
-        device = config.get('device')
-        endpoint = config.get('endpoint')
-        transmission = config.get(
-            'transmission') if 'transmission' in config.keys() else True
-        zk = ZkConnect(
-            host=device.get('host'),
-            port=device.get('port'),
-            endpoint=endpoint,
-            transmission=transmission
-        )
-        zk.monitor()
-    except Exception as e:
-        print(e)
-        logging.warning(e)
-        # Restart process
-        # init()
+    logging.basicConfig(
+        format='%(asctime)s/%(name)s/%(levelname)s/%(lineno)d: %(message)s',
+        filename='transaction_log.txt',
+        level=logging.DEBUG
+    )
+    configPath = Path(os.path.abspath(__file__)).parent / 'config.yaml'
+    stream = open(configPath, 'r')
+    config = ParseConfig.parse(stream)
+    device = config.get('device')
+    endpoint = config.get('endpoint')
+    transmission = config.get(
+        'transmission') if 'transmission' in config.keys() else True
+    zk = ZkConnect(
+        host=device.get('host'),
+        port=device.get('port'),
+        endpoint=endpoint,
+        transmission=transmission
+    )
+    zk.monitor()
 
 
 if __name__ == "__main__":
