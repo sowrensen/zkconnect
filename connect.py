@@ -72,13 +72,12 @@ class ZkConnect:
         """
         Check connection health, in case of failure attempt re-establishment.
         """
-        if not self.connection.is_connect or self.connection is None:
-            self._connect(reconnect=True)
-        else:
+        try:
             # This should ensure that the device is still connected
-            time = self.connection.get_time()
-            logging.debug('Getting device time: {}'.format(time))
-            print('Getting device time: {}'.format(time))
+            print('Getting device time: {}'.format(self.connection.get_time()))
+        except Exception as error:
+            logging.error(error)
+            self._connect(reconnect=True)
     
     def monitor(self):
         """
@@ -170,6 +169,8 @@ def init():
     except Exception as e:
         print(e)
         logging.warning(e)
+        # Restart process
+        # init()
 
 
 if __name__ == "__main__":

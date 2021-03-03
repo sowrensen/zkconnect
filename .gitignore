@@ -149,3 +149,4 @@ config.yaml
 transaction_log.txt
 .idea/
 *.ini
+test*
