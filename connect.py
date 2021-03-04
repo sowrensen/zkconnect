@@ -145,7 +145,7 @@ def init():
     Initiate the ZK Teco monitoring client.
     """
     logging.basicConfig(
-        format='%(asctime)s/%(name)s/%(levelname)s/%(lineno)d: %(message)s',
+        format='%(asctime)s %(name)s %(levelname)s %(lineno)d: %(message)s',
         filename='transaction_log.txt',
         level=logging.DEBUG
     )

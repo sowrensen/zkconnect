@@ -1,6 +1,6 @@
 # ZKConnect
 
-ZK Connect is a python script designed to work as a client to send realtime attendance data from ZK Teco devices to an external API. It is designed to run using a service like Supervisor.
+ZK Connect is a python script designed to work as a client to relay realtime attendance data from ZK Teco devices to an external API. It is designed to run using a service like Supervisor. I wrote it to work alongside with Laravel applications built at my workplace.
 
 ### Requirements
 
@@ -11,7 +11,7 @@ ZK Connect is a python script designed to work as a client to send realtime atte
 
 ### Supported Devices
 
-This script uses [pyzk](https://github.com/fananimi/pyzk) library to communicate with devices, hence it should support any device supported by pyzk.
+This script uses [pyzk](https://github.com/fananimi/pyzk) library to communicate with devices, hence it should support any device supported by pyzk. However, it is explicitly tested with ZKTeco F18 and K40 models. If you get it working with more devices, let me know.
 
 ## Usage
 
@@ -32,7 +32,7 @@ device:
   host: XXX.XXX.XXX.XXX # your device's ip address
   port: 4370 # usually 4370 is used by most of the devices
 endpoint: http://my-app.test/log # a post API route to your app
-transmission: true # true by default
+transmission: true # whether or not to transmit data to API, useful for debugging purpose
 ```
 
 ### Running
@@ -65,5 +65,4 @@ The script keeps all transaction logs in a `transaction_log.txt` file within the
 
 ### Known Issues
 
-  - Sometimes while running via **Supervisor** service, the real time transmission stops working after a while. There are some suspected reasons behind this issue, but none is still confirmed or identified as the real cause.
-  - If the device goes offline or restarts, the script may not be able to re-establish the connection on its own. This case is not confirmed by the way, just an assumption.
+The script can detect any disruption in connectivity and hence exits so that supervisor can rerun the script reconnecting to the device. The reconnection attempt might take a few seconds and during this time nothing will be transmitted.
