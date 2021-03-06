@@ -2,4 +2,7 @@ device:
   host: 192.168.0.112
   port: 4370
 endpoint: http://test.com # don't forget to point this to your application route
-transmission: false
+transmission: true
+log:
+  filename: transactions # do not include extension
+  split: true

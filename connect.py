@@ -3,6 +3,7 @@
 import logging
 import os
 from pathlib import Path
+from datetime import date
 
 import requests
 from yaml import Loader, load
@@ -140,18 +141,38 @@ class ParseConfig:
         return config
 
 
+def configLogger(config):
+    logging.basicConfig(
+        format='%(asctime)s %(name)s %(levelname)s %(lineno)d: %(message)s',
+        filename=getLogFileName(config),
+        level=logging.DEBUG
+    )
+
+
+def getLogFileName(config):
+    if config is None:
+        return 'transactions.log'
+    else:
+        return "{}-{}.log".format(config.get('filename'), date.today().strftime("%Y-%m-%d")) \
+            if config.get('split') \
+            else "{}.log".format(config.get('filename'))
+
+
 def init():
     """
     Initiate the ZK Teco monitoring client.
     """
-    logging.basicConfig(
-        format='%(asctime)s %(name)s %(levelname)s %(lineno)d: %(message)s',
-        filename='transaction_log.txt',
-        level=logging.DEBUG
-    )
+    # Load the config
     configPath = Path(os.path.abspath(__file__)).parent / 'config.yaml'
     stream = open(configPath, 'r')
+    
+    # Parse config
     config = ParseConfig.parse(stream)
+    
+    # Setup logger
+    configLogger(config.get('log'))
+    
+    # Setup connection
     device = config.get('device')
     endpoint = config.get('endpoint')
     transmission = config.get(
@@ -162,6 +183,8 @@ def init():
         endpoint=endpoint,
         transmission=transmission
     )
+
+    # Start monitoring
     zk.monitor()
 
 

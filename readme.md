@@ -33,6 +33,9 @@ device:
   port: 4370 # usually 4370 is used by most of the devices
 endpoint: http://my-app.test/log # a post API route to your app
 transmission: true # whether or not to transmit data to API, useful for debugging purpose
+log:
+  filename: transaction # name of log file
+  split: true # splits log file for each day if enabled, else writes into one file
 ```
 
 ### Running
@@ -60,7 +63,7 @@ The server response should contain two keys:
 
 ### Debugging
 
-The script keeps all transaction logs in a `transaction_log.txt` file within the directory with all the necessary information for debugging.
+The script keeps all necessary log information within the directory which may come handy for debugging. The log files can be split into several files for each day or can be written into one file. See the [Config File](#config-file) section for configuration.
 
 
 ### Known Issues
