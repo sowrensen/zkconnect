@@ -2,6 +2,7 @@
 
 import logging
 import os
+import sys
 from pathlib import Path
 from datetime import date
 
@@ -142,6 +143,11 @@ class ParseConfig:
 
 
 def configLogger(config):
+    """
+    Configure the log formatting.
+    
+    :param config: Union[dict, None]
+    """
     logging.basicConfig(
         format='%(asctime)s %(name)s %(levelname)s %(lineno)d: %(message)s',
         filename=getLogFileName(config),
@@ -150,6 +156,12 @@ def configLogger(config):
 
 
 def getLogFileName(config):
+    """
+    Determine the log file name.
+    
+    :param config: Union[dict, None]
+    :return: str
+    """
     if config is None:
         return 'transactions.log'
     else:
@@ -162,30 +174,34 @@ def init():
     """
     Initiate the ZK Teco monitoring client.
     """
-    # Load the config
-    configPath = Path(os.path.abspath(__file__)).parent / 'config.yaml'
-    stream = open(configPath, 'r')
+    try:
+        # Load the config
+        configPath = Path(os.path.abspath(__file__)).parent / 'config.yaml'
+        stream = open(configPath, 'r')
+        
+        # Parse config
+        config = ParseConfig.parse(stream)
+        
+        # Setup logger
+        configLogger(config.get('log'))
+        
+        # Setup connection
+        device = config.get('device')
+        endpoint = config.get('endpoint')
+        transmission = config.get(
+            'transmission') if 'transmission' in config.keys() else True
+        zk = ZkConnect(
+            host=device.get('host'),
+            port=device.get('port'),
+            endpoint=endpoint,
+            transmission=transmission
+        )
     
-    # Parse config
-    config = ParseConfig.parse(stream)
-    
-    # Setup logger
-    configLogger(config.get('log'))
-    
-    # Setup connection
-    device = config.get('device')
-    endpoint = config.get('endpoint')
-    transmission = config.get(
-        'transmission') if 'transmission' in config.keys() else True
-    zk = ZkConnect(
-        host=device.get('host'),
-        port=device.get('port'),
-        endpoint=endpoint,
-        transmission=transmission
-    )
-
-    # Start monitoring
-    zk.monitor()
+        # Start monitoring
+        zk.monitor()
+    except Exception as error:
+        logging.error(error)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
