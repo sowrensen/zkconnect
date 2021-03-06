@@ -29,6 +29,7 @@ class ZkConnect:
             self.endpoint = endpoint
             self.transmission = transmission
             self.connection = None
+            self._startedAt = date.today()
             self._connect()
         except (ZKNetworkError, ZKErrorConnection, ZKError) as error:
             logging.error(error)
@@ -78,6 +79,15 @@ class ZkConnect:
         # exception is raised, supervisor should start the process
         # all over again.
         print('Getting device time: {}'.format(self.connection.get_time()))
+        
+    def _shouldStartNewFile(self):
+        """
+        Check if it is a new day, if it is, exit the program
+        and hence the program starts with a new log file if
+        split is set to true in config.
+        """
+        if date.today() != self._startedAt:
+            raise Exception('--END OF THE DAY--')
     
     def monitor(self):
         """
@@ -97,6 +107,7 @@ class ZkConnect:
                     })
                 else:
                     print('Received data: {}'.format(log))
+            self._shouldStartNewFile()
     
     def disconnect(self):
         """
@@ -196,7 +207,7 @@ def init():
             endpoint=endpoint,
             transmission=transmission
         )
-    
+        
         # Start monitoring
         zk.monitor()
     except Exception as error:
