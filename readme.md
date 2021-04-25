@@ -1,6 +1,6 @@
 # ZKConnect
 
-ZK Connect is a python script designed to work as a client to relay realtime attendance data from ZK Teco devices to an external API. It is designed to run using a service like Supervisor. I wrote it to work alongside with Laravel applications built at my workplace.
+ZK Connect is a python micro-service designed to work as a client to relay real-time attendance data from ZK Teco devices to an external API. It is designed to run using a service like Supervisor. I wrote it to work alongside with Laravel applications built at my workplace.
 
 ### Requirements
 
